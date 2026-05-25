@@ -7,11 +7,11 @@
 #define CONFIG_H
 
 // --- WiFi ---
-#define WIFI_SSID     "menowifi"
-#define WIFI_PASSWORD "heslowifi"          
+#define WIFI_SSID     "d201"
+#define WIFI_PASSWORD "MechaTronyka"          
 
 // --- MQTT Broker ---
-#define MQTT_HOST     "192.168.1.220"
+#define MQTT_HOST     "192.168.11.100"
 #define MQTT_PORT     1883
 #define MQTT_PASSWORD "misa"
 
