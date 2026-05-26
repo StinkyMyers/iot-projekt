@@ -1,0 +1,13 @@
+[Unit]
+Description=MQTT to SQLite logger
+After=network.target mosquitto.service
+
+[Service]
+ExecStart=/usr/bin/python3 /home/misa26/Desktop/server/mqtt_to_db.py
+WorkingDirectory=/home/misa26/Desktop/server
+Restart=always
+RestartSec=5
+User=misa26
+
+[Install]
+WantedBy=multi-user.target
