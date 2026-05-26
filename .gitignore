@@ -7,3 +7,13 @@ __pycache__/
 Thumbs.db
 shared/config.h
 .vscode
+
+#
+firmware\uzol1\lib
+firmware\uzol1\include
+# 
+firmware\uzol2\lib
+firmware\uzol2\include
+#
+firmware\uzol3\lib
+firmware\uzol3\include

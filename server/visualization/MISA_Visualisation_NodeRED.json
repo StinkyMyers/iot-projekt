@@ -1,0 +1,2393 @@
+[
+    {
+        "id": "c63bfa0abb015f42",
+        "type": "tab",
+        "label": "MISA Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7e1e6cc388d2ace6",
+        "type": "mqtt in",
+        "z": "c63bfa0abb015f42",
+        "name": "uzol1",
+        "topic": "fei/uzol1/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "broker1",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "e767fc25ef810089",
+                "e5f2317aee2d93ec"
+            ]
+        ]
+    },
+    {
+        "id": "e767fc25ef810089",
+        "type": "json",
+        "z": "c63bfa0abb015f42",
+        "name": "Parse JSON",
+        "x": 300,
+        "y": 80,
+        "wires": [
+            [
+                "7a243d5bcbd08638"
+            ]
+        ]
+    },
+    {
+        "id": "7a243d5bcbd08638",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Priprav U1",
+        "func": "var data = msg.payload;\nif (typeof data === 'string') {\n    try { data = JSON.parse(data); }\n    catch(e) { return null; }\n}\nif (!data || data.value === null || data.value === undefined) return null;\n\nvar val = data.value;\nvar parts = msg.topic.split('/');\nvar velicina = parts[parts.length - 1];\n\nmsg.payload = val;\nmsg.topic = msg.topic;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 80,
+        "wires": [
+            [
+                "6df6e5e6f6be45c3"
+            ]
+        ]
+    },
+    {
+        "id": "6df6e5e6f6be45c3",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "Switch U1",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "fei/uzol1/temperature",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol1/humidity",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol1/dust",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 650,
+        "y": 80,
+        "wires": [
+            [
+                "a0b89ea2ba676065",
+                "40610e9190f8e016"
+            ],
+            [
+                "7803e5f7b41dd52e",
+                "dbd4d645bfff3a27"
+            ],
+            [
+                "258d2820d9d61c70",
+                "32d00aee212a52e8"
+            ]
+        ]
+    },
+    {
+        "id": "a0b89ea2ba676065",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "66d10b547c86f3b3",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "label": "Teplota (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7803e5f7b41dd52e",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "66d10b547c86f3b3",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "label": "Vlhkosť (%RH)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff7f0e",
+            "#aec7e8",
+            "#1f77b4",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "258d2820d9d61c70",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "66d10b547c86f3b3",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "label": "Prach (µg/m³)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#9467bd",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#1f77b4",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e5f2317aee2d93ec",
+        "type": "trigger",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "op1": "🟢 Online",
+        "op2": "🔴 Offline",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "60",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 300,
+        "y": 160,
+        "wires": [
+            [
+                "0ebda975a518376a"
+            ]
+        ]
+    },
+    {
+        "id": "0ebda975a518376a",
+        "type": "ui_text",
+        "z": "c63bfa0abb015f42",
+        "group": "66d10b547c86f3b3",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Stav Uzol 1:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 480,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "7c835e730435df66",
+        "type": "mqtt in",
+        "z": "c63bfa0abb015f42",
+        "name": "uzol2",
+        "topic": "fei/uzol2/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "broker1",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "f7b7a022859ce297",
+                "fe9bbcdd943ad020"
+            ]
+        ]
+    },
+    {
+        "id": "f7b7a022859ce297",
+        "type": "json",
+        "z": "c63bfa0abb015f42",
+        "name": "Parse JSON",
+        "x": 300,
+        "y": 260,
+        "wires": [
+            [
+                "9a0d0966e461dbcb"
+            ]
+        ]
+    },
+    {
+        "id": "9a0d0966e461dbcb",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Priprav U2",
+        "func": "var data = msg.payload;\nif (typeof data === 'string') {\n    try { data = JSON.parse(data); }\n    catch(e) { return null; }\n}\nif (!data || data.value === null || data.value === undefined) return null;\n\nvar val = data.value;\nvar parts = msg.topic.split('/');\nvar velicina = parts[parts.length - 1];\n\nmsg.payload = val;\nmsg.topic = msg.topic;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 260,
+        "wires": [
+            [
+                "a7ddc47b346bdfe5"
+            ]
+        ]
+    },
+    {
+        "id": "a7ddc47b346bdfe5",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "Switch U2",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "fei/uzol2/aqi",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol2/tvoc",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol2/eco2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 650,
+        "y": 260,
+        "wires": [
+            [
+                "9b9cedd89a2475c5",
+                "5647536d61b0f9c6"
+            ],
+            [
+                "a93072a96f2ac36a",
+                "b4d682feab9995f3"
+            ],
+            [
+                "fb07f4fc276a688a",
+                "d054fed893cd1a52"
+            ]
+        ]
+    },
+    {
+        "id": "9b9cedd89a2475c5",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "759206cdbf097b75",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "AQI (index)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#2ca02c",
+            "#aec7e8",
+            "#ff7f0e",
+            "#1f77b4",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a93072a96f2ac36a",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "759206cdbf097b75",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "label": "TVOC (ppb)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#9467bd",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#1f77b4",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb07f4fc276a688a",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "759206cdbf097b75",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "label": "eCO2 (ppm)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#d62728",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#1f77b4",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fe9bbcdd943ad020",
+        "type": "trigger",
+        "z": "c63bfa0abb015f42",
+        "op1": "🟢 Online",
+        "op2": "🔴 Offline",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "60",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 300,
+        "y": 340,
+        "wires": [
+            [
+                "d6db93a66de71305"
+            ]
+        ]
+    },
+    {
+        "id": "d6db93a66de71305",
+        "type": "ui_text",
+        "z": "c63bfa0abb015f42",
+        "group": "759206cdbf097b75",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Stav Uzol 2:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 480,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "3b9afe3010ba6266",
+        "type": "mqtt in",
+        "z": "c63bfa0abb015f42",
+        "name": "uzol3",
+        "topic": "fei/uzol3/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "broker1",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 480,
+        "wires": [
+            [
+                "86ef8a0d937d0a24",
+                "eadd1aac0df18832"
+            ]
+        ]
+    },
+    {
+        "id": "86ef8a0d937d0a24",
+        "type": "json",
+        "z": "c63bfa0abb015f42",
+        "name": "Parse JSON",
+        "x": 300,
+        "y": 460,
+        "wires": [
+            [
+                "45c1398bb542276f"
+            ]
+        ]
+    },
+    {
+        "id": "45c1398bb542276f",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Priprav U3",
+        "func": "var data = msg.payload;\nif (typeof data === 'string') {\n    try { data = JSON.parse(data); }\n    catch(e) { return null; }\n}\nif (!data || data.value === null || data.value === undefined) return null;\n\nvar val = data.value;\nvar parts = msg.topic.split('/');\nvar velicina = parts[parts.length - 1];\n\nmsg.payload = val;\nmsg.topic = msg.topic;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 460,
+        "wires": [
+            [
+                "1a3612c7638c76af"
+            ]
+        ]
+    },
+    {
+        "id": "1a3612c7638c76af",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "Switch U3",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "fei/uzol3/ch4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol3/temperature",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol3/humidity",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "fei/uzol3/pressure",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 650,
+        "y": 460,
+        "wires": [
+            [
+                "83b48c19dafb337e",
+                "f1524dfe8651daa7"
+            ],
+            [
+                "3acbdc7af88f8b3b",
+                "d4a3d1eaa8910779"
+            ],
+            [
+                "992ebf1113aeeb65",
+                "b6207d1459491386"
+            ],
+            [
+                "7bbb64a5f2542dd2",
+                "871369bcbe47bcfb"
+            ]
+        ]
+    },
+    {
+        "id": "83b48c19dafb337e",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "741df843de785c15",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Metán CH4 (ppm)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff7f0e",
+            "#aec7e8",
+            "#1f77b4",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3acbdc7af88f8b3b",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "741df843de785c15",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "label": "Teplota (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "992ebf1113aeeb65",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "741df843de785c15",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "label": "Vlhkosť (%RH)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff7f0e",
+            "#aec7e8",
+            "#1f77b4",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7bbb64a5f2542dd2",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "741df843de785c15",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "label": "Tlak vzduchu (hPa)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Čakám...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#2ca02c",
+            "#aec7e8",
+            "#ff7f0e",
+            "#1f77b4",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 880,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eadd1aac0df18832",
+        "type": "trigger",
+        "z": "c63bfa0abb015f42",
+        "op1": "🟢 Online",
+        "op2": "🔴 Offline",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "60",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 300,
+        "y": 560,
+        "wires": [
+            [
+                "e7f00b0e17fc223e"
+            ]
+        ]
+    },
+    {
+        "id": "e7f00b0e17fc223e",
+        "type": "ui_text",
+        "z": "c63bfa0abb015f42",
+        "group": "741df843de785c15",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Stav Uzol 3:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 480,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "a906ee944d78aa85",
+        "type": "ui_button",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "602ae5172abf2a25",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Načítaj históriu (24h)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 140,
+        "y": 700,
+        "wires": [
+            [
+                "ef6979e0228e6c57"
+            ]
+        ]
+    },
+    {
+        "id": "ef6979e0228e6c57",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "SQL história uzol1",
+        "func": "var od = Math.floor(Date.now()/1000) - 86400;\nmsg.topic = \"SELECT ts, node, velicina, value, unit FROM merania WHERE ts >= \" + od + \" AND value IS NOT NULL AND node = 'uzol1' ORDER BY ts ASC;\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 700,
+        "wires": [
+            [
+                "fa842f83865d57cc"
+            ]
+        ]
+    },
+    {
+        "id": "fa842f83865d57cc",
+        "type": "sqlite",
+        "z": "c63bfa0abb015f42",
+        "mydb": "sqlite_db",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "SQLite",
+        "x": 560,
+        "y": 700,
+        "wires": [
+            [
+                "08bce0fafd0bb0dc"
+            ]
+        ]
+    },
+    {
+        "id": "08bce0fafd0bb0dc",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Formátuj U1",
+        "func": "var rows = msg.payload;\nif (!rows || rows.length === 0) { node.warn('Žiadne historické dáta'); return null; }\n\nvar series = {};\nrows.forEach(function(r) {\n    var key = r.node + '/' + r.velicina;\n    if (!series[key]) series[key] = [];\n    series[key].push({ x: r.ts * 1000, y: r.value });\n});\n\nObject.keys(series).forEach(function(key) {\n    var velicinaName = key.split('/')[1];\n    node.send({\n        topic: key,\n        payload: [{\n            series: [velicinaName],\n            data: [series[key]]\n        }]\n    });\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 700,
+        "wires": [
+            [
+                "5c1416bd89d4cc63"
+            ]
+        ]
+    },
+    {
+        "id": "5c1416bd89d4cc63",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "uzol1/temperature",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol1/humidity",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol1/dust",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 920,
+        "y": 700,
+        "wires": [
+            [
+                "ba87904c17ed13b2"
+            ],
+            [
+                "e11d579cf461d0d6"
+            ],
+            [
+                "dca6cb827d759c5c"
+            ]
+        ]
+    },
+    {
+        "id": "e11d579cf461d0d6",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "602ae5172abf2a25",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Vlhkosť (%RH)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dca6cb827d759c5c",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "602ae5172abf2a25",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Prach (µg/m³)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#64d200",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "04ab2d2b9fa8725f",
+        "type": "ui_button",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "6d44fe19d2d2ea3a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Načítaj históriu (24h)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 140,
+        "y": 860,
+        "wires": [
+            [
+                "d5b133faa707928a"
+            ]
+        ]
+    },
+    {
+        "id": "d5b133faa707928a",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "SQL história uzol2",
+        "func": "var od = Math.floor(Date.now()/1000) - 86400;\nmsg.topic = \"SELECT ts, node, velicina, value, unit FROM merania WHERE ts >= \" + od + \" AND value IS NOT NULL AND node = 'uzol2' ORDER BY ts ASC;\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 860,
+        "wires": [
+            [
+                "a60de87bd3a8e2d0"
+            ]
+        ]
+    },
+    {
+        "id": "a60de87bd3a8e2d0",
+        "type": "sqlite",
+        "z": "c63bfa0abb015f42",
+        "mydb": "sqlite_db",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "SQLite",
+        "x": 560,
+        "y": 860,
+        "wires": [
+            [
+                "29f39e88c38b1b92"
+            ]
+        ]
+    },
+    {
+        "id": "29f39e88c38b1b92",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Formátuj U2",
+        "func": "var rows = msg.payload;\nif (!rows || rows.length === 0) { node.warn('Žiadne historické dáta'); return null; }\n\nvar series = {};\nrows.forEach(function(r) {\n    var key = r.node + '/' + r.velicina;\n    if (!series[key]) series[key] = [];\n    series[key].push({ x: r.ts * 1000, y: r.value });\n});\n\nObject.keys(series).forEach(function(key) {\n    var velicinaName = key.split('/')[1];\n    node.send({\n        topic: key,\n        payload: [{\n            series: [velicinaName],\n            data: [series[key]]\n        }]\n    });\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 860,
+        "wires": [
+            [
+                "306587b054be4cc3"
+            ]
+        ]
+    },
+    {
+        "id": "306587b054be4cc3",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "uzol2/aqi",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol2/tvoc",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol2/eco2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 920,
+        "y": 860,
+        "wires": [
+            [
+                "7b76cb71a155ad2b"
+            ],
+            [
+                "2defdaaaa0c36cf8"
+            ],
+            [
+                "f7382754ea5df589"
+            ]
+        ]
+    },
+    {
+        "id": "7b76cb71a155ad2b",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "6d44fe19d2d2ea3a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "AQI (index)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#b91a25",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2defdaaaa0c36cf8",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "6d44fe19d2d2ea3a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "TVOC (ppb)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#b4cc06",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1130,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7382754ea5df589",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "6d44fe19d2d2ea3a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "eCO2 (ppm)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#04b0ce",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "11edc49983b4aefc",
+        "type": "ui_button",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "a3ef067240d0edd6",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Načítaj históriu (24h)",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 140,
+        "y": 1020,
+        "wires": [
+            [
+                "9d0f8ff627539c9d"
+            ]
+        ]
+    },
+    {
+        "id": "9d0f8ff627539c9d",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "SQL história uzol3",
+        "func": "var od = Math.floor(Date.now()/1000) - 86400;\nmsg.topic = \"SELECT ts, node, velicina, value, unit FROM merania WHERE ts >= \" + od + \" AND value IS NOT NULL AND node = 'uzol3' ORDER BY ts ASC;\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1020,
+        "wires": [
+            [
+                "6935a6367e073b0c"
+            ]
+        ]
+    },
+    {
+        "id": "6935a6367e073b0c",
+        "type": "sqlite",
+        "z": "c63bfa0abb015f42",
+        "mydb": "sqlite_db",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "SQLite",
+        "x": 560,
+        "y": 1020,
+        "wires": [
+            [
+                "3cca033a52228fa6"
+            ]
+        ]
+    },
+    {
+        "id": "3cca033a52228fa6",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Formátuj U3",
+        "func": "var rows = msg.payload;\nif (!rows || rows.length === 0) { node.warn('Žiadne historické dáta'); return null; }\n\nvar series = {};\nrows.forEach(function(r) {\n    var key = r.node + '/' + r.velicina;\n    if (!series[key]) series[key] = [];\n    series[key].push({ x: r.ts * 1000, y: r.value });\n});\n\nObject.keys(series).forEach(function(key) {\n    var velicinaName = key.split('/')[1];\n    node.send({\n        topic: key,\n        payload: [{\n            series: [velicinaName],\n            data: [series[key]]\n        }]\n    });\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 1020,
+        "wires": [
+            [
+                "1530b7a8b69ae371"
+            ]
+        ]
+    },
+    {
+        "id": "1530b7a8b69ae371",
+        "type": "switch",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "uzol3/ch4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol3/temperature",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol3/humidity",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "uzol3/pressure",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 920,
+        "y": 1020,
+        "wires": [
+            [
+                "926078d172f90646"
+            ],
+            [
+                "fc1a355ca2872dd2"
+            ],
+            [
+                "1eb848d998219c39"
+            ],
+            [
+                "7bd8ec0153f274a9"
+            ]
+        ]
+    },
+    {
+        "id": "926078d172f90646",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "a3ef067240d0edd6",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Metán CH4 (ppm)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#b41f1f",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc1a355ca2872dd2",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "a3ef067240d0edd6",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Teplota (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#891bb8",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1eb848d998219c39",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "a3ef067240d0edd6",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Vlhkosť (%RH)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#bd9b15",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7bd8ec0153f274a9",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "a3ef067240d0edd6",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "Tlak vzduchu (hPa)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#0bcd05",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5fc33e181c3c33b5",
+        "type": "ui_form",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "label": "Bezpečné mazanie DB",
+        "group": "faefb8ca3fe1749a",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Zadajte heslo pre vymazanie",
+                "value": "heslo",
+                "type": "password",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "heslo": ""
+        },
+        "payload": "",
+        "submit": "Vymazať dáta",
+        "cancel": "Zrušiť",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 160,
+        "y": 1220,
+        "wires": [
+            [
+                "c8e31822a6ba05fe"
+            ]
+        ]
+    },
+    {
+        "id": "c8e31822a6ba05fe",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "Skontroluj heslo",
+        "func": "var spravneHeslo = \"misamisa\";\nif (msg.payload.heslo === spravneHeslo) {\n    msg.topic = \"DELETE FROM merania;\";\n    return [msg, null];\n} else {\n    msg.payload = \"Nesprávne heslo!\";\n    return [null, msg];\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1220,
+        "wires": [
+            [
+                "387f3d8a1f25ca0a"
+            ],
+            [
+                "eb6aebbd02f2aff4"
+            ]
+        ]
+    },
+    {
+        "id": "387f3d8a1f25ca0a",
+        "type": "sqlite",
+        "z": "c63bfa0abb015f42",
+        "mydb": "sqlite_db",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "SQLite",
+        "x": 580,
+        "y": 1200,
+        "wires": [
+            [
+                "5d3c7ea8ea89115b"
+            ]
+        ]
+    },
+    {
+        "id": "5d3c7ea8ea89115b",
+        "type": "change",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Dáta vymazané!",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 1200,
+        "wires": [
+            [
+                "8bba15a04b0c87a2"
+            ]
+        ]
+    },
+    {
+        "id": "8bba15a04b0c87a2",
+        "type": "ui_toast",
+        "z": "c63bfa0abb015f42",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 940,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "eb6aebbd02f2aff4",
+        "type": "ui_toast",
+        "z": "c63bfa0abb015f42",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 580,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "40610e9190f8e016",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 25 ? \"green\" : val < 30 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"°C\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 40,
+        "wires": [
+            [
+                "573e42227e596b95"
+            ]
+        ]
+    },
+    {
+        "id": "dbd4d645bfff3a27",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 60 ? \"green\" : val < 80 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"%RH\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 80,
+        "wires": [
+            [
+                "bd23750fb25056b2"
+            ]
+        ]
+    },
+    {
+        "id": "32d00aee212a52e8",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 25 ? \"green\" : val < 75 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"µg/m³\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 120,
+        "wires": [
+            [
+                "2565c1b8f7961b4c"
+            ]
+        ]
+    },
+    {
+        "id": "5647536d61b0f9c6",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val <= 1 ? \"green\" : val <= 3 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"index\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 220,
+        "wires": [
+            [
+                "508aaeddc58a7b12"
+            ]
+        ]
+    },
+    {
+        "id": "b4d682feab9995f3",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 100 ? \"green\" : val < 300 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"ppb\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 260,
+        "wires": [
+            [
+                "f779314e3225c47f"
+            ]
+        ]
+    },
+    {
+        "id": "d054fed893cd1a52",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 800 ? \"green\" : val < 1200 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"ppm\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 300,
+        "wires": [
+            [
+                "57e119e90d7fc83e"
+            ]
+        ]
+    },
+    {
+        "id": "f1524dfe8651daa7",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 500 ? \"green\" : val < 1000 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"ppm\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 420,
+        "wires": [
+            [
+                "7f770f485da2c166"
+            ]
+        ]
+    },
+    {
+        "id": "d4a3d1eaa8910779",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 25 ? \"green\" : val < 30 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"°C\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 460,
+        "wires": [
+            [
+                "033e95069f0f6b71"
+            ]
+        ]
+    },
+    {
+        "id": "b6207d1459491386",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val < 60 ? \"green\" : val < 80 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"%RH\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 500,
+        "wires": [
+            [
+                "319afb55a8e0b09c"
+            ]
+        ]
+    },
+    {
+        "id": "871369bcbe47bcfb",
+        "type": "function",
+        "z": "c63bfa0abb015f42",
+        "name": "fmt",
+        "func": "var val = Number(msg.payload);\nvar color = val >= 1000 && val <= 1013 ? \"green\" : val < 1000 ? \"orange\" : \"red\";\n\nmsg.payload = {\n    value: val,\n    unit: \"hPa\",\n    color: color\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 540,
+        "wires": [
+            [
+                "33caafbc8770dc03"
+            ]
+        ]
+    },
+    {
+        "id": "573e42227e596b95",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "66d10b547c86f3b3",
+        "name": "Teplota",
+        "order": 5,
+        "width": "0",
+        "height": "0",
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n  <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1260,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ba87904c17ed13b2",
+        "type": "ui_chart",
+        "z": "c63bfa0abb015f42",
+        "name": "",
+        "group": "602ae5172abf2a25",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Teplota (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "DD.MM HH:mm",
+        "interpolate": "linear",
+        "nodata": "Klikni tlačidlo",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#d20000",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1120,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bd23750fb25056b2",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "66d10b547c86f3b3",
+        "name": "Vlhkost",
+        "order": 8,
+        "width": "0",
+        "height": "0",
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1260,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2565c1b8f7961b4c",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "66d10b547c86f3b3",
+        "name": "Prach",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "508aaeddc58a7b12",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "759206cdbf097b75",
+        "name": "AQI",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f779314e3225c47f",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "759206cdbf097b75",
+        "name": "TVOC",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "57e119e90d7fc83e",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "759206cdbf097b75",
+        "name": "eCO2",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7f770f485da2c166",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "741df843de785c15",
+        "name": "Metan",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "033e95069f0f6b71",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "741df843de785c15",
+        "name": "Teplota",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1260,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "319afb55a8e0b09c",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "741df843de785c15",
+        "name": "Vlhkost",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1260,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "33caafbc8770dc03",
+        "type": "ui_template",
+        "z": "c63bfa0abb015f42",
+        "group": "741df843de785c15",
+        "name": "Tlak",
+        "order": 14,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"\n    text-align:center;\n    font-size:22px;\n    font-weight:bold;\n\">\n    <span style=\"color: {{msg.payload.color}}\">\n        {{msg.payload.value}} {{msg.payload.unit}}\n    </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "broker1",
+        "type": "mqtt-broker",
+        "name": "RPi Mosquitto",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "nodered",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "66d10b547c86f3b3",
+        "type": "ui_group",
+        "name": "Uzol 1 — DHT11 + GP2Y10",
+        "tab": "0e82a25c7e1ba150",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": "uzol1-group"
+    },
+    {
+        "id": "759206cdbf097b75",
+        "type": "ui_group",
+        "name": "Uzol 2 — ENS160",
+        "tab": "0e82a25c7e1ba150",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "741df843de785c15",
+        "type": "ui_group",
+        "name": "Uzol 3 — MQ-4 + BME",
+        "tab": "0e82a25c7e1ba150",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "602ae5172abf2a25",
+        "type": "ui_group",
+        "name": "Uzol 1 — História",
+        "tab": "5a876521a8914308",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "sqlite_db",
+        "type": "sqlitedb",
+        "db": "/home/misa26/Desktop/server/data.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "6d44fe19d2d2ea3a",
+        "type": "ui_group",
+        "name": "Uzol 2 — História",
+        "tab": "5a876521a8914308",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a3ef067240d0edd6",
+        "type": "ui_group",
+        "name": "Uzol 3 — História",
+        "tab": "5a876521a8914308",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "faefb8ca3fe1749a",
+        "type": "ui_group",
+        "name": "Mazanie DB",
+        "tab": "41c5dfeade6b8746",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0e82a25c7e1ba150",
+        "type": "ui_tab",
+        "name": "Live",
+        "icon": "dashboard",
+        "order": 5
+    },
+    {
+        "id": "5a876521a8914308",
+        "type": "ui_tab",
+        "name": "História",
+        "icon": "history",
+        "order": 7
+    },
+    {
+        "id": "41c5dfeade6b8746",
+        "type": "ui_tab",
+        "name": "Nastavenia",
+        "icon": "settings",
+        "order": 9
+    },
+    {
+        "id": "f28cea90bd668746",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-node-sqlite": "2.0.1"
+        }
+    }
+]
