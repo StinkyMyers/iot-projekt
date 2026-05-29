@@ -35,7 +35,7 @@ Systém meria environmentálne veličiny v troch miestnostiach FEI pomocou senzo
 └─────────────────────────────────────────────┘
 ```
 
-Schéma zapojenia jednotlivých uzlov: [`docs/schema.png`](docs/schema.png)
+Schéma zapojenia jednotlivých uzlov: [`docs/image.png`](docs/image.png)
 
 ---
 
